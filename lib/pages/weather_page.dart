@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/location_service.dart';
 import 'package:weather_app/services/weather_service.dart';
 import 'package:intl/intl.dart';
+import 'package:weather_app/constants.dart';
+import 'package:weather_app/widgets/forecast_list.dart';
+import 'package:weather_app/widgets/weather_animation.dart';
+import 'package:weather_app/widgets/weather_info.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -16,13 +19,11 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-  final _weatherService =
-      WeatherService('a68be96863e81680c1c00e641a278502'); //api key
+  final _weatherService = WeatherService(API_KEY);
+  final _locationService = LocationService(API_KEY);
 
-  final _locationService = LocationService('a68be96863e81680c1c00e641a278502');
   Weather? _weather;
   String _units = 'metric'; //default to metric
-
   final TextEditingController _cityController = TextEditingController();
 
 // fetch weather based on city name or device location
@@ -35,7 +36,6 @@ class _WeatherPageState extends State<WeatherPage> {
         // If the user has entered a city name, fetch coordinates for that city
         final coordinates = await _locationService
             .getCoordinatesByCityName(_cityController.text);
-
         lat = coordinates['lat']!;
         lon = coordinates['lon']!;
       } else {
@@ -55,39 +55,7 @@ class _WeatherPageState extends State<WeatherPage> {
     }
     // any errors
     catch (e) {
-      print(e);
-    }
-  }
-
-// weather animations
-  String getWeatherAnimation(String? mainCondition) {
-    debugPrint(mainCondition);
-    if (mainCondition == null) {
-      return 'assets/sunny.json'; // default set to sunny
-    }
-
-    switch (mainCondition.toLowerCase()) {
-      case 'clouds':
-      case 'mist':
-      case 'smoke':
-      case 'haze':
-      case 'dust':
-      case 'fog':
-        return 'assets/cloudy.json';
-
-      case 'rain':
-      case 'drizzle':
-      case 'shower rain':
-        return 'assets/rainy.json';
-
-      case 'thunderstorm':
-        return 'assets/thunder.json';
-
-      case 'clear':
-        return 'assets/sunny.json';
-
-      default:
-        return 'assets/sunny.json';
+      throw Exception('Failed to load weather data');
     }
   }
 
@@ -144,52 +112,22 @@ class _WeatherPageState extends State<WeatherPage> {
               Text(formattedDate),
 
               // animation
-              Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
-              //Lottie.asset('assets/thunder.json'),
+              WeatherAnimation(mainCondition: _weather?.mainCondition),
 
-              // temperature
-              Text(
-                  '${_weather?.temperature.round()}°${_units == 'metric' ? 'C' : 'F'}'),
+              WeatherInfo(weather: _weather!, units: _units),
+              /*
+              The ! operator in Dart is called the "null assertion operator."
+              It is used to tell the Dart compiler that you are certain a value that is currently of a nullable type
+              (Weather? in this case) is not null at the point where you are using it.
 
-              // feels like temperature
-              Text(
-                  'Feels like: ${_weather?.feelsLike.round()}°${_units == 'metric' ? 'C' : 'F'}'),
-
-              // humidity
-              Text('Humidity: ${_weather?.humidity}%'),
-
-              // wind speed
-              Text(
-                  'Wind Speed: ${_weather?.windSpeed} ${_units == 'metric' ? 'm/s' : 'mph'}'),
-
-              // sunrise
-              Text(
-                  'Sunrise: ${DateTime.fromMillisecondsSinceEpoch(_weather!.sunrise * 1000).toLocal().toString().split(' ')[1]}'),
-
-              // sunset
-              Text(
-                  'Sunset: ${DateTime.fromMillisecondsSinceEpoch(_weather!.sunset * 1000).toLocal().toString().split(' ')[1]}'),
+              When you see _weather!, it means that the code assumes that _weather is not null at that point.
+              If _weather is actually null, the program will throw a runtime error
+              (specifically a NullPointerException).
+              */
 
               // Daily forecast
               Expanded(
-                child: ListView.builder(
-                  itemCount: _weather?.dailyForecast.length ?? 0,
-                  itemBuilder: (context, index) {
-                    if (index >= 6)
-                      return null; //limiting to today + next 5 days
-                    final daily = _weather!.dailyForecast[index];
-                    final date =
-                        DateTime.fromMillisecondsSinceEpoch(daily.date * 1000)
-                            .toLocal()
-                            .toString()
-                            .split(' ')[0];
-                    return ListTile(
-                      title: Text(date),
-                      subtitle: Text(daily.description),
-                      trailing: Text('${daily.minTemp}° - ${daily.maxTemp}°'),
-                    );
-                  },
-                ),
+                child: ForecastList(dailyForecast: _weather!.dailyForecast),
               ),
             ],
           ],

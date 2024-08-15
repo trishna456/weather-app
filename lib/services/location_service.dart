@@ -1,12 +1,9 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
+import 'package:weather_app/constants.dart';
 
 class LocationService {
-  // ignore: constant_identifier_names
-  static const GEO_BASE_URL = 'https://api.openweathermap.org/geo/1.0/';
   final String apiKey;
 
   LocationService(this.apiKey);
@@ -19,7 +16,6 @@ class LocationService {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      debugPrint('Location permissions are permanently denied.');
       throw Exception('Location permissions are permanently denied.');
     }
 
