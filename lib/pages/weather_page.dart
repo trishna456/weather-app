@@ -74,63 +74,108 @@ class _WeatherPageState extends State<WeatherPage> {
     final String formattedDate = DateFormat('EEEE, MMMM d').format(now);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Weather App'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.swap_horiz),
-            onPressed: () {
-              setState(() {
-                _units = _units == 'metric' ? 'imperial' : 'metric';
-                _fetchWeather();
-              });
-            },
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF74b9ff), // Light blue at the top
+                Color(0xFF0984e3),
+              ]), // Darker blue at the bottom,
+        ),
+        child: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                TextField(
+                  controller: _cityController,
+                  decoration: const InputDecoration(
+                    labelText: 'Enter city name',
+                    border: OutlineInputBorder(),
+                  ),
+                  onSubmitted: (value) => _fetchWeather(),
+                ),
+                ElevatedButton(
+                  onPressed: _fetchWeather,
+                  child: const Text('Get Weather'),
+                ),
+                if (_weather != null) ...[
+                  const SizedBox(height: 30), // for top padding
+                  // City Name
+                  Text(
+                    _weather?.cityName ?? _cityController.text,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      color: Colors.white,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+                  Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 25.0),
+                        child: Text(
+                          '${_weather?.temperature.round()}',
+                          style: const TextStyle(
+                            fontSize: 80,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 20, // Adjust the position as needed
+                        right: 1,
+                        child: Text(
+                          '°${_units == 'metric' ? 'C' : 'F'}',
+                          style: const TextStyle(
+                            fontSize:
+                                24, // Smaller font size for the degree symbol
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: 'Poppins',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // Date and Day
+                  Text(
+                    formattedDate,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                      fontFamily: 'Poppins',
+                    ),
+                  ),
+
+                  // animation
+                  WeatherAnimation(mainCondition: _weather?.mainCondition),
+
+                  WeatherInfo(weather: _weather!, units: _units),
+                  /*
+                The ! operator in Dart is called the "null assertion operator."
+                It is used to tell the Dart compiler that you are certain a value that is currently of a nullable type
+                (Weather? in this case) is not null at the point where you are using it.
+          
+                When you see _weather!, it means that the code assumes that _weather is not null at that point.
+                If _weather is actually null, the program will throw a runtime error
+                (specifically a NullPointerException).
+                */
+
+                  // Daily forecast
+                  Expanded(
+                    child: ForecastList(dailyForecast: _weather!.dailyForecast),
+                  ),
+                ],
+              ],
+            ),
           ),
-        ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _cityController,
-              decoration: const InputDecoration(
-                labelText: 'Enter city name',
-                border: OutlineInputBorder(),
-              ),
-              onSubmitted: (value) => _fetchWeather(),
-            ),
-            ElevatedButton(
-              onPressed: _fetchWeather,
-              child: const Text('Get Weather'),
-            ),
-            if (_weather != null) ...[
-              // city name
-              Text(_weather?.cityName ?? "Loading city..."),
-
-              // current date and day
-              Text(formattedDate),
-
-              // animation
-              WeatherAnimation(mainCondition: _weather?.mainCondition),
-
-              WeatherInfo(weather: _weather!, units: _units),
-              /*
-              The ! operator in Dart is called the "null assertion operator."
-              It is used to tell the Dart compiler that you are certain a value that is currently of a nullable type
-              (Weather? in this case) is not null at the point where you are using it.
-
-              When you see _weather!, it means that the code assumes that _weather is not null at that point.
-              If _weather is actually null, the program will throw a runtime error
-              (specifically a NullPointerException).
-              */
-
-              // Daily forecast
-              Expanded(
-                child: ForecastList(dailyForecast: _weather!.dailyForecast),
-              ),
-            ],
-          ],
         ),
       ),
     );
