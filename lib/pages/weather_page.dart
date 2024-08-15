@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_service.dart';
@@ -17,15 +18,18 @@ class _WeatherPageState extends State<WeatherPage> {
 
   final _weatherService = WeatherService('a68be96863e81680c1c00e641a278502');
   Weather? _weather;
+  String _units = 'metric'; //default to metric
 
 // fetch weather
   _fetchWeather() async {
-    // get the current city
-    String cityName = await _weatherService.getCurrentCity();
+    // get the current position
+    Position position = await _weatherService.getCurrentPosition();
 
-    // get weather for city
     try {
-      final weather = await _weatherService.getWeather(cityName);
+      // get weather for position
+      final weather = await _weatherService.getWeatherByCoordinates(
+          position.latitude, position.longitude, _units);
+
       setState(() {
         _weather = weather;
       });
@@ -80,12 +84,26 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Weather App'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.swap_horiz),
+            onPressed: () {
+              setState(() {
+                _units = _units == 'metric' ? 'imperial' : 'metric';
+                _fetchWeather();
+              });
+            },
+          ),
+        ],
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // city name
-            Text(_weather?.cityName ?? "loading city..."),
+            Text(_weather?.cityName ?? "Loading city..."),
 
             // animation
             Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
