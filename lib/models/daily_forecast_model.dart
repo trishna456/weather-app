@@ -1,11 +1,11 @@
-class DailyWeather {
+class DailyForecast {
   final int date;
   final double minTemp;
   final double maxTemp;
   final String mainCondition;
   final String description;
 
-  DailyWeather({
+  DailyForecast({
     required this.date,
     required this.minTemp,
     required this.maxTemp,
@@ -13,8 +13,8 @@ class DailyWeather {
     required this.description,
   });
 
-  factory DailyWeather.fromJson(Map<String, dynamic> json) {
-    return DailyWeather(
+  factory DailyForecast.fromJson(Map<String, dynamic> json) {
+    return DailyForecast(
       date: json['dt'],
       minTemp: json['temp']['min'].toDouble(),
       maxTemp: json['temp']['max'].toDouble(),

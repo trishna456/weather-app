@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_service.dart';
+import 'package:intl/intl.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -14,18 +15,19 @@ class WeatherPage extends StatefulWidget {
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-// api key
-
-  final _weatherService = WeatherService('a68be96863e81680c1c00e641a278502');
+  final _weatherService =
+      WeatherService('a68be96863e81680c1c00e641a278502'); //api key
   Weather? _weather;
   String _units = 'metric'; //default to metric
 
+  final TextEditingController _cityController = TextEditingController();
+
 // fetch weather
   _fetchWeather() async {
-    // get the current position
-    Position position = await _weatherService.getCurrentPosition();
-
     try {
+      // get the current position
+      Position position = await _weatherService.getCurrentPosition();
+
       // get weather for position
       final weather = await _weatherService.getWeatherByCoordinates(
           position.latitude, position.longitude, _units);
@@ -36,6 +38,21 @@ class _WeatherPageState extends State<WeatherPage> {
     }
     // any errors
     catch (e) {
+      print(e);
+    }
+  }
+
+  _fetchWeatherByCity() async {
+    try {
+      final coordinates =
+          await _weatherService.getCoordinatesByCityName(_cityController.text);
+      final weather = await _weatherService.getWeatherByCoordinates(
+          coordinates['lat']!, coordinates['lon']!, _units);
+
+      setState(() {
+        _weather = weather;
+      });
+    } catch (e) {
       print(e);
     }
   }
@@ -83,6 +100,9 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
+    final DateTime now = DateTime.now();
+    final String formattedDate = DateFormat('EEEE, MMMM d').format(now);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Weather App'),
@@ -102,56 +122,74 @@ class _WeatherPageState extends State<WeatherPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // city name
-            Text(_weather?.cityName ?? "Loading city..."),
-
-            // animation
-            Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
-            //Lottie.asset('assets/thunder.json'),
-
-            // temperature
-            Text(
-                '${_weather?.temperature.round()}°${_units == 'metric' ? 'C' : 'F'}'),
-
-            // feels like temperature
-            Text(
-                'Feels like: ${_weather?.feelsLike.round()}°${_units == 'metric' ? 'C' : 'F'}'),
-
-            // humidity
-            Text('Humidity: ${_weather?.humidity}%'),
-
-            // wind speed
-            Text(
-                'Wind Speed: ${_weather?.windSpeed} ${_units == 'metric' ? 'm/s' : 'mph'}'),
-
-            // sunrise
-            Text(
-                'Sunrise: ${DateTime.fromMillisecondsSinceEpoch(_weather!.sunrise * 1000).toLocal().toString().split(' ')[1]}'),
-
-            // sunset
-            Text(
-                'Sunset: ${DateTime.fromMillisecondsSinceEpoch(_weather!.sunset * 1000).toLocal().toString().split(' ')[1]}'),
-
-            // Daily forecast
-            Expanded(
-              child: ListView.builder(
-                itemCount: _weather?.dailyForecast.length ?? 0,
-                itemBuilder: (context, index) {
-                  if (index >= 5) return null; //limiting to next 5 days
-                  final daily = _weather!.dailyForecast[index];
-                  final date =
-                      DateTime.fromMillisecondsSinceEpoch(daily.date * 1000)
-                          .toLocal()
-                          .toString()
-                          .split(' ')[0];
-                  return ListTile(
-                    title: Text(date),
-                    subtitle: Text(daily.description),
-                    trailing: Text('${daily.minTemp}° - ${daily.maxTemp}°'),
-                  );
-                },
+            TextField(
+              controller: _cityController,
+              decoration: const InputDecoration(
+                labelText: 'Enter city name',
+                border: OutlineInputBorder(),
               ),
+              onSubmitted: (value) => _fetchWeatherByCity(),
             ),
+            ElevatedButton(
+              onPressed: _fetchWeatherByCity,
+              child: const Text('Get Weather'),
+            ),
+            if (_weather != null) ...[
+              // city name
+              Text(_weather?.cityName ?? "Loading city..."),
+
+              // current date and day
+              Text(formattedDate),
+
+              // animation
+              Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
+              //Lottie.asset('assets/thunder.json'),
+
+              // temperature
+              Text(
+                  '${_weather?.temperature.round()}°${_units == 'metric' ? 'C' : 'F'}'),
+
+              // feels like temperature
+              Text(
+                  'Feels like: ${_weather?.feelsLike.round()}°${_units == 'metric' ? 'C' : 'F'}'),
+
+              // humidity
+              Text('Humidity: ${_weather?.humidity}%'),
+
+              // wind speed
+              Text(
+                  'Wind Speed: ${_weather?.windSpeed} ${_units == 'metric' ? 'm/s' : 'mph'}'),
+
+              // sunrise
+              Text(
+                  'Sunrise: ${DateTime.fromMillisecondsSinceEpoch(_weather!.sunrise * 1000).toLocal().toString().split(' ')[1]}'),
+
+              // sunset
+              Text(
+                  'Sunset: ${DateTime.fromMillisecondsSinceEpoch(_weather!.sunset * 1000).toLocal().toString().split(' ')[1]}'),
+
+              // Daily forecast
+              Expanded(
+                child: ListView.builder(
+                  itemCount: _weather?.dailyForecast.length ?? 0,
+                  itemBuilder: (context, index) {
+                    if (index >= 6)
+                      return null; //limiting to today + next 5 days
+                    final daily = _weather!.dailyForecast[index];
+                    final date =
+                        DateTime.fromMillisecondsSinceEpoch(daily.date * 1000)
+                            .toLocal()
+                            .toString()
+                            .split(' ')[0];
+                    return ListTile(
+                      title: Text(date),
+                      subtitle: Text(daily.description),
+                      trailing: Text('${daily.minTemp}° - ${daily.maxTemp}°'),
+                    );
+                  },
+                ),
+              ),
+            ],
           ],
         ),
       ),

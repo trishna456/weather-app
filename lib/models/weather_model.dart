@@ -1,31 +1,31 @@
-import 'daily_weather_model.dart';
+import 'daily_forecast_model.dart';
 
 class Weather {
   final String cityName;
   final double temperature;
   final String mainCondition;
+  final String description;
+  final double feelsLike;
   final double humidity;
   final double windSpeed;
   final int windDirection;
-  final double feelsLike;
   final double pressure;
-  final String description;
   final int visibility;
   final int sunrise;
   final int sunset;
   final double uvIndex;
-  final List<DailyWeather> dailyForecast;
+  final List<DailyForecast> dailyForecast;
 
   Weather({
     required this.cityName,
     required this.temperature,
     required this.mainCondition,
+    required this.description,
+    required this.feelsLike,
     required this.humidity,
     required this.windSpeed,
     required this.windDirection,
-    required this.feelsLike,
     required this.pressure,
-    required this.description,
     required this.visibility,
     required this.sunrise,
     required this.sunset,
@@ -42,20 +42,20 @@ class Weather {
     In this case, Weather.fromJson is a factory constructor that creates a Weather instance from a JSON map.
     It is not an inbuilt function; rather, it is a custom constructor that we have defined for our Weather class.
     */
-    List<DailyWeather> dailyForecast = (json['daily'] as List)
-        .map((dailyJson) => DailyWeather.fromJson(dailyJson))
+    List<DailyForecast> dailyForecast = (json['daily'] as List)
+        .map((dailyJson) => DailyForecast.fromJson(dailyJson))
         .toList();
 
     return Weather(
       cityName: cityName,
       temperature: json['current']['temp'].toDouble(),
       mainCondition: json['current']['weather'][0]['main'],
+      description: json['current']['weather'][0]['description'],
+      feelsLike: json['current']['feels_like'].toDouble(),
       humidity: json['current']['humidity'].toDouble(),
       windSpeed: json['current']['wind_speed'].toDouble(),
       windDirection: json['current']['wind_deg'].toInt(),
-      feelsLike: json['current']['feels_like'].toDouble(),
       pressure: json['current']['pressure'].toDouble(),
-      description: json['current']['weather'][0]['description'],
       visibility: json['current']['visibility'].toInt(),
       sunrise: json['current']['sunrise'].toInt(),
       sunset: json['current']['sunset'].toInt(),
