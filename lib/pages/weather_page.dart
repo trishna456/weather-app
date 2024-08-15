@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
+import 'package:weather_app/services/location_service.dart';
 import 'package:weather_app/services/weather_service.dart';
 import 'package:intl/intl.dart';
 
@@ -17,20 +18,36 @@ class WeatherPage extends StatefulWidget {
 class _WeatherPageState extends State<WeatherPage> {
   final _weatherService =
       WeatherService('a68be96863e81680c1c00e641a278502'); //api key
+
+  final _locationService = LocationService('a68be96863e81680c1c00e641a278502');
   Weather? _weather;
   String _units = 'metric'; //default to metric
 
   final TextEditingController _cityController = TextEditingController();
 
-// fetch weather
+// fetch weather based on city name or device location
   _fetchWeather() async {
-    try {
-      // get the current position
-      Position position = await _weatherService.getCurrentPosition();
+    double lat;
+    double lon;
 
-      // get weather for position
-      final weather = await _weatherService.getWeatherByCoordinates(
-          position.latitude, position.longitude, _units);
+    try {
+      if (_cityController.text.isNotEmpty) {
+        // If the user has entered a city name, fetch coordinates for that city
+        final coordinates = await _locationService
+            .getCoordinatesByCityName(_cityController.text);
+
+        lat = coordinates['lat']!;
+        lon = coordinates['lon']!;
+      } else {
+        // otherwise, fetch weather from the current device location
+        Position position = await _locationService.getCurrentPosition();
+        lat = position.latitude;
+        lon = position.longitude;
+      }
+
+      // get weather
+      final weather =
+          await _weatherService.getWeatherByCoordinates(lat, lon, _units);
 
       setState(() {
         _weather = weather;
@@ -38,21 +55,6 @@ class _WeatherPageState extends State<WeatherPage> {
     }
     // any errors
     catch (e) {
-      print(e);
-    }
-  }
-
-  _fetchWeatherByCity() async {
-    try {
-      final coordinates =
-          await _weatherService.getCoordinatesByCityName(_cityController.text);
-      final weather = await _weatherService.getWeatherByCoordinates(
-          coordinates['lat']!, coordinates['lon']!, _units);
-
-      setState(() {
-        _weather = weather;
-      });
-    } catch (e) {
       print(e);
     }
   }
@@ -128,10 +130,10 @@ class _WeatherPageState extends State<WeatherPage> {
                 labelText: 'Enter city name',
                 border: OutlineInputBorder(),
               ),
-              onSubmitted: (value) => _fetchWeatherByCity(),
+              onSubmitted: (value) => _fetchWeather(),
             ),
             ElevatedButton(
-              onPressed: _fetchWeatherByCity,
+              onPressed: _fetchWeather,
               child: const Text('Get Weather'),
             ),
             if (_weather != null) ...[
