@@ -110,7 +110,48 @@ class _WeatherPageState extends State<WeatherPage> {
             //Lottie.asset('assets/thunder.json'),
 
             // temperature
-            Text('${_weather?.temperature.round()}°C')
+            Text(
+                '${_weather?.temperature.round()}°${_units == 'metric' ? 'C' : 'F'}'),
+
+            // feels like temperature
+            Text(
+                'Feels like: ${_weather?.feelsLike.round()}°${_units == 'metric' ? 'C' : 'F'}'),
+
+            // humidity
+            Text('Humidity: ${_weather?.humidity}%'),
+
+            // wind speed
+            Text(
+                'Wind Speed: ${_weather?.windSpeed} ${_units == 'metric' ? 'm/s' : 'mph'}'),
+
+            // sunrise
+            Text(
+                'Sunrise: ${DateTime.fromMillisecondsSinceEpoch(_weather!.sunrise * 1000).toLocal().toString().split(' ')[1]}'),
+
+            // sunset
+            Text(
+                'Sunset: ${DateTime.fromMillisecondsSinceEpoch(_weather!.sunset * 1000).toLocal().toString().split(' ')[1]}'),
+
+            // Daily forecast
+            Expanded(
+              child: ListView.builder(
+                itemCount: _weather?.dailyForecast.length ?? 0,
+                itemBuilder: (context, index) {
+                  if (index >= 5) return null; //limiting to next 5 days
+                  final daily = _weather!.dailyForecast[index];
+                  final date =
+                      DateTime.fromMillisecondsSinceEpoch(daily.date * 1000)
+                          .toLocal()
+                          .toString()
+                          .split(' ')[0];
+                  return ListTile(
+                    title: Text(date),
+                    subtitle: Text(daily.description),
+                    trailing: Text('${daily.minTemp}° - ${daily.maxTemp}°'),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

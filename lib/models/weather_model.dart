@@ -1,3 +1,5 @@
+import 'daily_weather_model.dart';
+
 class Weather {
   final String cityName;
   final double temperature;
@@ -12,6 +14,7 @@ class Weather {
   final int sunrise;
   final int sunset;
   final double uvIndex;
+  final List<DailyWeather> dailyForecast;
 
   Weather({
     required this.cityName,
@@ -27,6 +30,7 @@ class Weather {
     required this.sunrise,
     required this.sunset,
     required this.uvIndex,
+    required this.dailyForecast,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json, String cityName) {
@@ -38,6 +42,9 @@ class Weather {
     In this case, Weather.fromJson is a factory constructor that creates a Weather instance from a JSON map.
     It is not an inbuilt function; rather, it is a custom constructor that we have defined for our Weather class.
     */
+    List<DailyWeather> dailyForecast = (json['daily'] as List)
+        .map((dailyJson) => DailyWeather.fromJson(dailyJson))
+        .toList();
 
     return Weather(
       cityName: cityName,
@@ -53,6 +60,7 @@ class Weather {
       sunrise: json['current']['sunrise'].toInt(),
       sunset: json['current']['sunset'].toInt(),
       uvIndex: json['current']['uvi'].toDouble(),
+      dailyForecast: dailyForecast,
     );
   }
 }
