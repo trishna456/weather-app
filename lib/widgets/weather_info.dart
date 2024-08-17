@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_app/models/weather_model.dart';
+import 'package:flutter/cupertino.dart';
+import 'weather_info_item.dart';
 
 class WeatherInfo extends StatelessWidget {
   final Weather weather;
@@ -9,37 +12,63 @@ class WeatherInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // temperature
-        Text(
-          '${weather.temperature.round()}°${units == 'metric' ? 'C' : 'F'}',
-          style: const TextStyle(fontSize: 32),
-        ),
-        // feels like temperature
-        Text(
-          'Feels like: ${weather.feelsLike.round()}°${units == 'metric' ? 'C' : 'F'}',
-          style: const TextStyle(fontSize: 16),
-        ),
-        // humidity
-        Text('Humidity: ${weather.humidity}%',
-            style: const TextStyle(fontSize: 16)),
-        // wind speed
-        Text(
-          'Wind Speed: ${weather.windSpeed} ${units == 'metric' ? 'm/s' : 'mph'}',
-          style: const TextStyle(fontSize: 16),
-        ),
-        // sunrise
-        Text(
-          'Sunrise: ${DateTime.fromMillisecondsSinceEpoch(weather.sunrise * 1000).toLocal().toString().split(' ')[1]}',
-          style: const TextStyle(fontSize: 16),
-        ),
-        // sunset
-        Text(
-          'Sunset: ${DateTime.fromMillisecondsSinceEpoch(weather.sunset * 1000).toLocal().toString().split(' ')[1]}',
-          style: const TextStyle(fontSize: 16),
-        ),
-      ],
+    final DateFormat hourFormat =
+        DateFormat('h:mm'); // 5:53 format without AM/PM
+    final DateFormat periodFormat = DateFormat('a'); // AM/PM format
+
+    // Convert pressure from hPa to inHg
+    final double pressureInHg = weather.pressure * 0.02953;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0984e3),
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          WeatherInfoItem(
+            icon: CupertinoIcons.sunrise,
+            label: 'Sunrise',
+            value: hourFormat.format(
+                DateTime.fromMillisecondsSinceEpoch(weather.sunrise * 1000)),
+            unit: periodFormat
+                .format(
+                    DateTime.fromMillisecondsSinceEpoch(weather.sunrise * 1000))
+                .toLowerCase(),
+          ),
+          WeatherInfoItem(
+            icon: CupertinoIcons.sunset,
+            label: 'Sunset',
+            value: hourFormat.format(
+                DateTime.fromMillisecondsSinceEpoch(weather.sunset * 1000)),
+            unit: periodFormat
+                .format(
+                    DateTime.fromMillisecondsSinceEpoch(weather.sunset * 1000))
+                .toLowerCase(),
+          ),
+          WeatherInfoItem(
+            icon: CupertinoIcons.drop,
+            label: 'Humidity',
+            value: '${weather.humidity}',
+            unit: '%',
+          ),
+          WeatherInfoItem(
+            icon: CupertinoIcons.wind,
+            label: 'Wind',
+            value: '${weather.windSpeed}',
+            unit: units == 'metric' ? 'm/s' : 'mph',
+          ),
+          WeatherInfoItem(
+            icon: CupertinoIcons.gauge,
+            label: 'Pressure',
+            value: pressureInHg.toStringAsFixed(2),
+            unit: 'inHg',
+          ),
+        ],
+      ),
     );
   }
 }

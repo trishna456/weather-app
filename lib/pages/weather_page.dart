@@ -71,7 +71,10 @@ class _WeatherPageState extends State<WeatherPage> {
   @override
   Widget build(BuildContext context) {
     final DateTime now = DateTime.now();
-    final String formattedDate = DateFormat('EEEE, MMMM d').format(now);
+    final String formattedDate = DateFormat('MMMM d').format(now); // August 15
+    final String formattedDay = DateFormat('EEEE').format(now); // Thursday
+    final String finalFormattedDate = '$formattedDate | $formattedDay';
+    // August 15 | Thursday
 
     return Scaffold(
       body: Container(
@@ -89,6 +92,57 @@ class _WeatherPageState extends State<WeatherPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                // Input field, button, and unit toggle in one row
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _cityController,
+                          decoration: const InputDecoration(
+                            labelText: 'Enter city name',
+                            border: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                            labelStyle: TextStyle(
+                              color: Colors.white,
+                            ),
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.white),
+                            ),
+                          ),
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                          onSubmitted: (value) => _fetchWeather(),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.swap_horiz, color: Colors.white),
+                        onPressed: () {
+                          setState(() {
+                            _units = _units == 'metric' ? 'imperial' : 'metric';
+                            _fetchWeather();
+                          });
+                        },
+                      ),
+                      ElevatedButton(
+                        onPressed: _fetchWeather,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                            side: const BorderSide(color: Colors.white),
+                          ),
+                        ),
+                        child: const Text('Get Weather'),
+                      ),
+                    ],
+                  ),
+                ),
+                /*
                 TextField(
                   controller: _cityController,
                   decoration: const InputDecoration(
@@ -101,6 +155,7 @@ class _WeatherPageState extends State<WeatherPage> {
                   onPressed: _fetchWeather,
                   child: const Text('Get Weather'),
                 ),
+                */
                 if (_weather != null) ...[
                   const SizedBox(height: 30), // for top padding
                   // City Name
@@ -122,7 +177,7 @@ class _WeatherPageState extends State<WeatherPage> {
                           style: const TextStyle(
                             fontSize: 80,
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.normal,
                             fontFamily: 'Poppins',
                           ),
                         ),
@@ -136,7 +191,7 @@ class _WeatherPageState extends State<WeatherPage> {
                             fontSize:
                                 24, // Smaller font size for the degree symbol
                             color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w400,
                             fontFamily: 'Poppins',
                           ),
                         ),
@@ -146,7 +201,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
                   // Date and Day
                   Text(
-                    formattedDate,
+                    finalFormattedDate,
                     style: const TextStyle(
                       fontSize: 20,
                       color: Colors.white,
