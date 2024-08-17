@@ -6,6 +6,8 @@ import 'package:weather_app/services/weather_service.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/constants.dart';
 import 'package:weather_app/widgets/forecast_list.dart';
+import 'package:weather_app/widgets/input_row.dart';
+
 import 'package:weather_app/widgets/weather_animation.dart';
 import 'package:weather_app/widgets/weather_info.dart';
 
@@ -92,70 +94,17 @@ class _WeatherPageState extends State<WeatherPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Input field, button, and unit toggle in one row
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _cityController,
-                          decoration: const InputDecoration(
-                            labelText: 'Enter city name',
-                            border: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                            labelStyle: TextStyle(
-                              color: Colors.white,
-                            ),
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.white),
-                            ),
-                          ),
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                          onSubmitted: (value) => _fetchWeather(),
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.swap_horiz, color: Colors.white),
-                        onPressed: () {
-                          setState(() {
-                            _units = _units == 'metric' ? 'imperial' : 'metric';
-                            _fetchWeather();
-                          });
-                        },
-                      ),
-                      ElevatedButton(
-                        onPressed: _fetchWeather,
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                            side: const BorderSide(color: Colors.white),
-                          ),
-                        ),
-                        child: const Text('Get Weather'),
-                      ),
-                    ],
-                  ),
-                ),
-                /*
-                TextField(
+                InputRow(
                   controller: _cityController,
-                  decoration: const InputDecoration(
-                    labelText: 'Enter city name',
-                    border: OutlineInputBorder(),
-                  ),
-                  onSubmitted: (value) => _fetchWeather(),
+                  onSearch: _fetchWeather,
+                  units: _units,
+                  onToggle: (selectedUnit) {
+                    setState(() {
+                      _units = selectedUnit;
+                      _fetchWeather();
+                    });
+                  },
                 ),
-                ElevatedButton(
-                  onPressed: _fetchWeather,
-                  child: const Text('Get Weather'),
-                ),
-                */
                 if (_weather != null) ...[
                   const SizedBox(height: 30), // for top padding
                   // City Name
