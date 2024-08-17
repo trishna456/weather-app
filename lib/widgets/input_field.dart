@@ -15,16 +15,24 @@ class InputField extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: const InputDecoration(
-        labelText: 'Enter city name',
-        border: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
-        ),
+        labelText: 'City Name',
         labelStyle: TextStyle(
           color: Colors.white,
+          fontSize: 14, // Smaller label text size
+        ),
+        border: UnderlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+              color: Color.fromARGB(255, 71, 146, 221)), // Light blue border
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.white),
+          borderSide: BorderSide(
+              color: Color.fromARGB(255, 19, 118, 218)), // Light blue border
         ),
+        floatingLabelBehavior:
+            FloatingLabelBehavior.never, // Hide label when typing
       ),
       style: const TextStyle(
         color: Colors.white,

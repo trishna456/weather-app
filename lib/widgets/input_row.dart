@@ -4,14 +4,14 @@ import 'package:weather_app/widgets/toggle_button.dart';
 
 class InputRow extends StatelessWidget {
   final TextEditingController controller;
-  final VoidCallback onSearch;
+  final VoidCallback fetchWeather;
   final String units;
   final ValueChanged<String> onToggle;
 
   const InputRow({
     super.key,
     required this.controller,
-    required this.onSearch,
+    required this.fetchWeather,
     required this.units,
     required this.onToggle,
   });
@@ -22,17 +22,27 @@ class InputRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         children: [
-          Expanded(
-            child: InputField(
-              controller: controller,
-              onSubmitted: onSearch,
+          // Input field and search button aligned to the left
+          Flexible(
+            flex: 1,
+            child: Row(
+              children: [
+                Expanded(
+                  child: InputField(
+                    controller: controller,
+                    onSubmitted: fetchWeather,
+                  ),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.search, color: Colors.white),
+                  onPressed: fetchWeather,
+                ),
+              ],
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.search, color: Colors.white),
-            onPressed: onSearch,
-          ),
-          const SizedBox(width: 10),
+          // Spacer to push the toggle button to the right
+          const Spacer(),
+          // Unit toggle switch aligned to the right
           UnitToggleButton(
             units: units,
             onToggle: onToggle,

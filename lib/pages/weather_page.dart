@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:weather_app/constants.dart';
 import 'package:weather_app/widgets/forecast_list.dart';
 import 'package:weather_app/widgets/input_row.dart';
-
 import 'package:weather_app/widgets/weather_animation.dart';
 import 'package:weather_app/widgets/weather_info.dart';
 
@@ -40,6 +39,8 @@ class _WeatherPageState extends State<WeatherPage> {
             .getCoordinatesByCityName(_cityController.text);
         lat = coordinates['lat']!;
         lon = coordinates['lon']!;
+        // Clear the input field after getting the coordinates
+        _cityController.clear();
       } else {
         // otherwise, fetch weather from the current device location
         Position position = await _locationService.getCurrentPosition();
@@ -96,7 +97,7 @@ class _WeatherPageState extends State<WeatherPage> {
               children: [
                 InputRow(
                   controller: _cityController,
-                  onSearch: _fetchWeather,
+                  fetchWeather: _fetchWeather,
                   units: _units,
                   onToggle: (selectedUnit) {
                     setState(() {
