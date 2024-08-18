@@ -21,18 +21,20 @@ class ForecastItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // Date with fixed width container
+          // ---------- Date ----------
           Container(
-            width: 90, // Adjust the width as necessary
+            width: 90,
             alignment: Alignment.centerLeft,
-            child: Text(date,
-                style: const TextStyle(color: Colors.white, fontSize: 16)),
+            child: Text(
+              date,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
+            ),
           ),
 
-          // Weather Icon
+          // ---------- Weather Icon ----------
           Icon(weatherIcon, size: 24, color: Colors.white),
 
-          // Min/Max Temperature
+          // ---------- Min/Max Temperature ----------
           Row(
             children: [
               Text(

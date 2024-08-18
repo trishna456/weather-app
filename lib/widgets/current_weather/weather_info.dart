@@ -1,6 +1,6 @@
-import 'package:intl/intl.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:weather_app/utils/custom_date_utils.dart';
 import 'weather_info_item.dart';
 
 class WeatherInfo extends StatelessWidget {
@@ -11,10 +11,6 @@ class WeatherInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat hourFormat =
-        DateFormat('h:mm'); // 5:53 format without AM/PM
-    final DateFormat periodFormat = DateFormat('a'); // AM/PM format
-
     // Convert pressure from hPa to inHg
     final double pressureInHg = weather.pressure * 0.02953;
 
@@ -28,38 +24,45 @@ class WeatherInfo extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
+          // ---------- Sunrise Information ----------
           WeatherInfoItem(
             icon: CupertinoIcons.sunrise,
             label: 'Sunrise',
-            value: hourFormat.format(
+            value: CustomDateUtils.formatTime(
                 DateTime.fromMillisecondsSinceEpoch(weather.sunrise * 1000)),
-            unit: periodFormat
-                .format(
+            unit: CustomDateUtils.formatPeriod(
                     DateTime.fromMillisecondsSinceEpoch(weather.sunrise * 1000))
                 .toLowerCase(),
           ),
+
+          // ---------- Sunset Information ----------
           WeatherInfoItem(
             icon: CupertinoIcons.sunset,
             label: 'Sunset',
-            value: hourFormat.format(
+            value: CustomDateUtils.formatTime(
                 DateTime.fromMillisecondsSinceEpoch(weather.sunset * 1000)),
-            unit: periodFormat
-                .format(
+            unit: CustomDateUtils.formatPeriod(
                     DateTime.fromMillisecondsSinceEpoch(weather.sunset * 1000))
                 .toLowerCase(),
           ),
+
+          // ---------- Humidity Information ----------
           WeatherInfoItem(
             icon: CupertinoIcons.drop,
             label: 'Humidity',
             value: '${weather.humidity}',
             unit: '%',
           ),
+
+          // ---------- Wind Speed Information ----------
           WeatherInfoItem(
             icon: CupertinoIcons.wind,
             label: 'Wind',
             value: '${weather.windSpeed}',
             unit: units == 'metric' ? 'm/s' : 'mph',
           ),
+
+          // ---------- Pressure Information ----------
           WeatherInfoItem(
             icon: CupertinoIcons.gauge,
             label: 'Pressure',

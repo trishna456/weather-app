@@ -8,8 +8,8 @@ class LocationService {
 
   LocationService(this.apiKey);
 
+  // ---------- Get Current Position ----------
   Future<Position> getCurrentPosition() async {
-    // get permission from user
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -19,19 +19,20 @@ class LocationService {
       throw Exception('Location permissions are permanently denied.');
     }
 
-    // define location settings
+    // Define location settings
     LocationSettings locationSettings = const LocationSettings(
       accuracy: LocationAccuracy.high,
       distanceFilter: 0,
     );
 
-    // fetch the current location
+    // Fetch the current location
     Position position =
         await Geolocator.getCurrentPosition(locationSettings: locationSettings);
 
     return position;
   }
 
+  // ---------- Get City Name by Coordinates ----------
   Future<String> getCityNameByCoordinates(double lat, double lon) async {
     final response = await http.get(
       Uri.parse('${GEO_BASE_URL}reverse?lat=$lat&lon=$lon&appid=$apiKey'),
@@ -49,6 +50,7 @@ class LocationService {
     }
   }
 
+  // ---------- Get Coordinates by City Name ----------
   Future<Map<String, double>> getCoordinatesByCityName(String cityName) async {
     final response = await http.get(
       Uri.parse('${GEO_BASE_URL}direct?q=$cityName&limit=1&appid=$apiKey'),

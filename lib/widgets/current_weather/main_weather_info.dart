@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/models/weather_model.dart';
-import 'package:intl/intl.dart';
-import 'package:weather_app/widgets/weather_animation.dart';
+import 'package:weather_app/widgets/current_weather/weather_animation.dart';
+import 'package:weather_app/utils/custom_date_utils.dart';
 
 class MainWeatherInfo extends StatelessWidget {
   final Weather weather;
@@ -15,12 +15,6 @@ class MainWeatherInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime now = DateTime.now();
-    final String formattedDate = DateFormat('MMMM d').format(now); // August 15
-    final String formattedDay = DateFormat('EEEE').format(now); // Thursday
-    final String finalFormattedDate = '$formattedDate | $formattedDay';
-    // August 15 | Thursday
-
     // Capitalize the first letter of each word in the description
     final String capitalizedDescription = weather.description
         .split(' ')
@@ -29,18 +23,20 @@ class MainWeatherInfo extends StatelessWidget {
 
     return Column(
       children: [
-        const SizedBox(height: 15), // for top padding
-        // City Name
+        const SizedBox(height: 15),
+
+        // ---------- City Name ----------
         Text(
           weather.cityName,
           style: const TextStyle(
             fontSize: 28,
-            //height: 1,
             fontWeight: FontWeight.w500,
             color: Colors.white,
             fontFamily: 'Poppins',
           ),
         ),
+
+        // ---------- Temperature Display with Degree Symbol ----------
         Stack(
           alignment: Alignment.topRight,
           children: [
@@ -57,12 +53,12 @@ class MainWeatherInfo extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 25, // Adjust the position as needed
+              top: 25,
               right: 1,
               child: Text(
                 '°${units == 'metric' ? 'C' : 'F'}',
                 style: const TextStyle(
-                  fontSize: 26, // Smaller font size for the degree symbol
+                  fontSize: 26,
                   color: Colors.white,
                   fontWeight: FontWeight.w400,
                   fontFamily: 'Poppins',
@@ -71,9 +67,10 @@ class MainWeatherInfo extends StatelessWidget {
             ),
           ],
         ),
-        // Date and Day
+
+        // ---------- Date and Day ----------
         Text(
-          finalFormattedDate,
+          CustomDateUtils.formatFullDate(DateTime.now()),
           style: const TextStyle(
             fontSize: 14,
             height: 0.1,
@@ -84,7 +81,8 @@ class MainWeatherInfo extends StatelessWidget {
         const SizedBox(
           height: 40,
         ),
-        // animation
+
+        // ---------- Weather Animation ----------
         WeatherAnimation(mainCondition: weather.mainCondition),
         const SizedBox(
           height: 15,

@@ -12,7 +12,8 @@ class CustomErrorWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const SizedBox(height: 40),
-        // Display the Lottie animation
+
+        // ---------- Lottie Error Animation ----------
         Opacity(
           opacity: 0.8,
           child: Lottie.asset(
@@ -23,7 +24,8 @@ class CustomErrorWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 15),
-        // Display the error message
+
+        // ---------- Error Message Text ----------
         Text(
           errorMessage,
           textAlign: TextAlign.center,

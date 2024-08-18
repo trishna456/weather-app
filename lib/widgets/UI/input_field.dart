@@ -18,21 +18,19 @@ class InputField extends StatelessWidget {
         labelText: 'City Name',
         labelStyle: TextStyle(
           color: Colors.white70,
-          fontSize: 14, // Smaller label text size
+          fontSize: 14,
         ),
         border: UnderlineInputBorder(
           borderSide: BorderSide(color: Colors.transparent),
         ),
         enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: Color.fromARGB(255, 71, 146, 221)), // Light blue border
+          borderSide: BorderSide(color: Color.fromARGB(255, 71, 146, 221)),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(
-              color: Color.fromARGB(255, 19, 118, 218)), // Light blue border
+          borderSide: BorderSide(color: Color.fromARGB(255, 19, 118, 218)),
         ),
         floatingLabelBehavior:
-            FloatingLabelBehavior.never, // Hide label when typing
+            FloatingLabelBehavior.never, // Hiding label when typing
       ),
       style: const TextStyle(
         color: Colors.white,

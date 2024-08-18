@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 class WeatherInfoItem extends StatelessWidget {
   final IconData icon;
@@ -8,12 +7,12 @@ class WeatherInfoItem extends StatelessWidget {
   final String unit;
 
   const WeatherInfoItem({
-    Key? key,
+    super.key,
     required this.icon,
     required this.label,
     required this.value,
     required this.unit,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,13 +20,18 @@ class WeatherInfoItem extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        // ---------- Weather Info Icon ----------
         Icon(icon, color: Colors.white, size: 26),
-        //const SizedBox(height: 3),
+
+        // ---------- Label Text (eg. Sunrise, Sunset) ----------
         Text(
           label,
           style: const TextStyle(color: Colors.white, fontSize: 9),
         ),
+
         const SizedBox(height: 4),
+
+        // ---------- Value and Unit Text ----------
         RichText(
           text: TextSpan(
             style: const TextStyle(color: Colors.white, fontSize: 14),

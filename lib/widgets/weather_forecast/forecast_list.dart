@@ -20,7 +20,7 @@ class ForecastList extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Sticky header
+          // ---------- Sticky Header ----------
           Container(
             padding: const EdgeInsets.symmetric(vertical: 4),
             decoration: const BoxDecoration(
@@ -44,7 +44,8 @@ class ForecastList extends StatelessWidget {
               ],
             ),
           ),
-          // Forecast list
+
+          // ---------- Forecast List ----------
           Expanded(
             child: ListView.builder(
               itemCount: dailyForecast.length > 6

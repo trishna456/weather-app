@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weather_app/widgets/input_field.dart';
-import 'package:weather_app/widgets/toggle_button.dart';
+import 'package:weather_app/widgets/UI/input_field.dart';
+import 'package:weather_app/widgets/UI/toggle_button.dart';
 
 class InputRow extends StatelessWidget {
   final TextEditingController controller;
@@ -22,7 +22,7 @@ class InputRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
         children: [
-          // Input field and search button aligned to the left
+          // ---------- Input Field and Search Button aligned to left ----------
           Flexible(
             flex: 1,
             child: Row(
@@ -40,9 +40,11 @@ class InputRow extends StatelessWidget {
               ],
             ),
           ),
-          // Spacer to push the toggle button to the right
+
+          // ---------- Spacer to push the toggle button to the right ----------
           const Spacer(),
-          // Unit toggle switch aligned to the right
+
+          // ---------- Unit Toggle Switch ----------
           UnitToggleButton(
             units: units,
             onToggle: onToggle,
