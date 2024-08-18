@@ -42,10 +42,10 @@ class LocationService {
       if (data.isNotEmpty) {
         return data[0]['name'];
       } else {
-        throw Exception('City not found');
+        throw Exception('City not found!');
       }
     } else {
-      throw Exception('Failed to load city name');
+      throw Exception('Failed to load city name.');
     }
   }
 
@@ -59,10 +59,10 @@ class LocationService {
       if (data.isNotEmpty) {
         return {'lat': data[0]['lat'], 'lon': data[0]['lon']};
       } else {
-        throw Exception('City not found');
+        throw Exception('Coordinates not found!');
       }
     } else {
-      throw Exception('Failed to load coordinates');
+      throw Exception('Failed to load coordinates.');
     }
   }
 }

@@ -22,7 +22,7 @@ class WeatherInfo extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
       margin: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        color: const Color(0xFF0984e3),
+        color: const Color.fromARGB(255, 10, 79, 132),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Row(

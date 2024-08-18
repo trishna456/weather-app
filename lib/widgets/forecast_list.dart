@@ -14,7 +14,7 @@ class ForecastList extends StatelessWidget {
       padding: const EdgeInsets.all(10.0),
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
       decoration: BoxDecoration(
-        color: const Color(0xFF0984e3), // Same as weather info container color
+        color: const Color.fromARGB(255, 10, 79, 132),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Column(

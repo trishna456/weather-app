@@ -24,7 +24,8 @@ class UnitToggleButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(8),
       selectedColor: Colors.white,
       color: Colors.white60,
-      fillColor: Colors.blueAccent.withOpacity(0.7),
+      fillColor: const Color.fromARGB(
+          255, 14, 115, 192), //Colors.blueAccent.withOpacity(0.7),
       constraints: const BoxConstraints(minHeight: 24, minWidth: 36),
       children: const [
         Padding(

@@ -17,7 +17,7 @@ class InputField extends StatelessWidget {
       decoration: const InputDecoration(
         labelText: 'City Name',
         labelStyle: TextStyle(
-          color: Colors.white,
+          color: Colors.white70,
           fontSize: 14, // Smaller label text size
         ),
         border: UnderlineInputBorder(

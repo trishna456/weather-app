@@ -7,8 +7,8 @@ import 'package:weather_app/constants.dart';
 import 'package:weather_app/widgets/forecast_list.dart';
 import 'package:weather_app/widgets/input_row.dart';
 import 'package:weather_app/widgets/main_weather_info.dart';
-import 'package:weather_app/widgets/weather_animation.dart';
 import 'package:weather_app/widgets/weather_info.dart';
+import 'package:weather_app/widgets/custom_error_widget.dart';
 
 class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
@@ -25,6 +25,7 @@ class _WeatherPageState extends State<WeatherPage> {
 
   Weather? _weather;
   String _units = 'metric'; //default to metric
+  String? _error;
   final TextEditingController _cityController = TextEditingController();
 
 // fetch weather based on city name or device location
@@ -33,6 +34,9 @@ class _WeatherPageState extends State<WeatherPage> {
     double lon;
 
     try {
+      setState(() {
+        _error = null; // Clear any previous error
+      });
       if (_cityController.text.isNotEmpty) {
         // If the user has entered a city name, fetch coordinates for that city
         final coordinates = await _locationService
@@ -42,10 +46,18 @@ class _WeatherPageState extends State<WeatherPage> {
         // Clear the input field after getting the coordinates
         _cityController.clear();
       } else {
-        // otherwise, fetch weather from the current device location
-        Position position = await _locationService.getCurrentPosition();
-        lat = position.latitude;
-        lon = position.longitude;
+        debugPrint(_weather?.cityName);
+        if (_weather?.cityName != null) {
+          final coordinates = await _locationService
+              .getCoordinatesByCityName(_weather!.cityName);
+          lat = coordinates['lat']!;
+          lon = coordinates['lon']!;
+        } else {
+          // otherwise, fetch weather from the current device location
+          Position position = await _locationService.getCurrentPosition();
+          lat = position.latitude;
+          lon = position.longitude;
+        }
       }
 
       // get weather
@@ -58,7 +70,12 @@ class _WeatherPageState extends State<WeatherPage> {
     }
     // any errors
     catch (e) {
-      throw Exception('Failed to load weather data');
+      debugPrint('Failed to load weather data.');
+      setState(() {
+        _error =
+            'Failed to load weather data. Please try again.'; // Set the error message
+      });
+      //throw Exception('Failed to load weather data');
     }
   }
 
@@ -80,53 +97,52 @@ class _WeatherPageState extends State<WeatherPage> {
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF74b9ff), // Light blue at the top
-                Color(0xFF0984e3),
-              ]), // Darker blue at the bottom,
+                Color.fromARGB(255, 9, 86, 145),
+                Color.fromARGB(255, 12, 35, 54),
+              ]),
         ),
         child: SafeArea(
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                InputRow(
-                  controller: _cityController,
-                  fetchWeather: _fetchWeather,
-                  units: _units,
-                  onToggle: (selectedUnit) {
-                    setState(() {
-                      _units = selectedUnit;
-                      _fetchWeather();
-                    });
-                  },
-                ),
-                if (_weather != null) ...[
-                  MainWeatherInfo(
-                    weather: _weather!,
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  InputRow(
+                    controller: _cityController,
+                    fetchWeather: _fetchWeather,
                     units: _units,
+                    onToggle: (selectedUnit) {
+                      setState(() {
+                        _units = selectedUnit;
+                        _fetchWeather();
+                      });
+                    },
                   ),
-
-                  // animation
-                  WeatherAnimation(mainCondition: _weather?.mainCondition),
-
-                  WeatherInfo(weather: _weather!, units: _units),
-                  /*
-                The ! operator in Dart is called the "null assertion operator."
-                It is used to tell the Dart compiler that you are certain a value that is currently of a nullable type
-                (Weather? in this case) is not null at the point where you are using it.
-          
-                When you see _weather!, it means that the code assumes that _weather is not null at that point.
-                If _weather is actually null, the program will throw a runtime error
-                (specifically a NullPointerException).
-                */
-
-                  // Daily forecast
-                  Expanded(
-                    child: ForecastList(dailyForecast: _weather!.dailyForecast),
-                  ),
+                  if (_error != null) ...[
+                    const SizedBox(height: 20),
+                    CustomErrorWidget(
+                      errorMessage: _error!,
+                    ),
+                  ] else if (_weather != null) ...[
+                    Expanded(
+                      child: Column(
+                        children: [
+                          MainWeatherInfo(
+                            weather: _weather!,
+                            units: _units,
+                          ),
+                          const SizedBox(height: 20),
+                          WeatherInfo(weather: _weather!, units: _units),
+                          Expanded(
+                            child: ForecastList(
+                                dailyForecast: _weather!.dailyForecast),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ],
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

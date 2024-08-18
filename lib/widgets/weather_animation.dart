@@ -38,6 +38,15 @@ class WeatherAnimation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Lottie.asset(getWeatherAnimation(mainCondition));
+    // return Lottie.asset(getWeatherAnimation(mainCondition));
+    return SizedBox(
+      height: 90,
+      child: OverflowBox(
+        minHeight: 100,
+        maxHeight: 130,
+        //child: Lottie.asset(getWeatherAnimation(mainCondition)),
+        child: Lottie.asset('assets/cloudy.json'),
+      ),
+    );
   }
 }

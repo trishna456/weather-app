@@ -34,7 +34,7 @@ class InputRow extends StatelessWidget {
                   ),
                 ),
                 IconButton(
-                  icon: const Icon(Icons.search, color: Colors.white),
+                  icon: const Icon(Icons.search, color: Colors.white70),
                   onPressed: fetchWeather,
                 ),
               ],
