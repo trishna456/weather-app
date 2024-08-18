@@ -31,55 +31,75 @@ class WeatherPage extends StatelessWidget {
         child: SafeArea(
           child: Stack(
             children: [
-              Column(
-                children: [
-                  // ---------- Input Row ----------
-                  const InputRow(),
+              LayoutBuilder(builder: (context, constraints) {
+                // Apply dynamic margins based on screen width
+                double sideMargin;
+                if (constraints.maxWidth > 1440) {
+                  sideMargin = 150;
+                } else if (constraints.maxWidth > 1280) {
+                  sideMargin = 100;
+                } else if (constraints.maxWidth > 1024) {
+                  sideMargin = 80;
+                } else if (constraints.maxWidth > 768) {
+                  sideMargin = 60;
+                } else if (constraints.maxWidth > 600) {
+                  sideMargin = 40;
+                } else {
+                  sideMargin = 1;
+                }
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: sideMargin),
+                  child: Column(
+                    children: [
+                      // ---------- Input Row ----------
+                      const InputRow(),
 
-                  // ---------- Loading State ----------
-                  if (weatherState.isLoading) ...[
-                    const Expanded(child: CustomLoadingWidget()),
-                  ]
+                      // ---------- Loading State ----------
+                      if (weatherState.isLoading) ...[
+                        const Expanded(child: CustomLoadingWidget()),
+                      ]
 
-                  // ---------- Error State ----------
-                  else if (weatherState.error != null) ...[
-                    const SizedBox(height: 20),
-                    CustomErrorWidget(
-                      errorMessage: weatherState.error!,
-                    ),
-                  ]
+                      // ---------- Error State ----------
+                      else if (weatherState.error != null) ...[
+                        const SizedBox(height: 20),
+                        CustomErrorWidget(
+                          errorMessage: weatherState.error!,
+                        ),
+                      ]
 
-                  // ---------- Display Weather Information ----------
-                  else if (weatherState.weather != null) ...[
-                    Expanded(
-                      child: Column(
-                        children: [
-                          // ---------- Main Weather Information ----------
-                          MainWeatherInfo(
-                            weather: weatherState.weather!,
-                            units: weatherState.units,
+                      // ---------- Display Weather Information ----------
+                      else if (weatherState.weather != null) ...[
+                        Expanded(
+                          child: Column(
+                            children: [
+                              // ---------- Main Weather Information ----------
+                              MainWeatherInfo(
+                                weather: weatherState.weather!,
+                                units: weatherState.units,
+                              ),
+
+                              const SizedBox(height: 20),
+
+                              // ---------- Additional Weather Details ----------
+                              WeatherInfo(
+                                weather: weatherState.weather!,
+                                units: weatherState.units,
+                              ),
+
+                              // ---------- 5-Day Weather Forecast ----------
+                              Expanded(
+                                child: ForecastList(
+                                    dailyForecast:
+                                        weatherState.weather!.dailyForecast),
+                              ),
+                            ],
                           ),
-
-                          const SizedBox(height: 20),
-
-                          // ---------- Additional Weather Details ----------
-                          WeatherInfo(
-                            weather: weatherState.weather!,
-                            units: weatherState.units,
-                          ),
-
-                          // ---------- 5-Day Weather Forecast ----------
-                          Expanded(
-                            child: ForecastList(
-                                dailyForecast:
-                                    weatherState.weather!.dailyForecast),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ],
-              ),
+                        ),
+                      ],
+                    ],
+                  ),
+                );
+              }),
             ],
           ),
         ),
