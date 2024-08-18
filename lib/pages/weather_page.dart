@@ -3,10 +3,10 @@ import 'package:geolocator/geolocator.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/location_service.dart';
 import 'package:weather_app/services/weather_service.dart';
-import 'package:intl/intl.dart';
 import 'package:weather_app/constants.dart';
 import 'package:weather_app/widgets/forecast_list.dart';
 import 'package:weather_app/widgets/input_row.dart';
+import 'package:weather_app/widgets/main_weather_info.dart';
 import 'package:weather_app/widgets/weather_animation.dart';
 import 'package:weather_app/widgets/weather_info.dart';
 
@@ -73,12 +73,6 @@ class _WeatherPageState extends State<WeatherPage> {
 
   @override
   Widget build(BuildContext context) {
-    final DateTime now = DateTime.now();
-    final String formattedDate = DateFormat('MMMM d').format(now); // August 15
-    final String formattedDay = DateFormat('EEEE').format(now); // Thursday
-    final String finalFormattedDate = '$formattedDate | $formattedDay';
-    // August 15 | Thursday
-
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -107,56 +101,9 @@ class _WeatherPageState extends State<WeatherPage> {
                   },
                 ),
                 if (_weather != null) ...[
-                  const SizedBox(height: 30), // for top padding
-                  // City Name
-                  Text(
-                    _weather?.cityName ?? _cityController.text,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      color: Colors.white,
-                      fontFamily: 'Poppins',
-                    ),
-                  ),
-                  Stack(
-                    alignment: Alignment.topRight,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 25.0),
-                        child: Text(
-                          '${_weather?.temperature.round()}',
-                          style: const TextStyle(
-                            fontSize: 80,
-                            color: Colors.white,
-                            fontWeight: FontWeight.normal,
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 20, // Adjust the position as needed
-                        right: 1,
-                        child: Text(
-                          '°${_units == 'metric' ? 'C' : 'F'}',
-                          style: const TextStyle(
-                            fontSize:
-                                24, // Smaller font size for the degree symbol
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Poppins',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  // Date and Day
-                  Text(
-                    finalFormattedDate,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontFamily: 'Poppins',
-                    ),
+                  MainWeatherInfo(
+                    weather: _weather!,
+                    units: _units,
                   ),
 
                   // animation

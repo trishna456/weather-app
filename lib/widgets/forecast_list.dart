@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/models/daily_forecast_model.dart';
-import 'forecast_item.dart';
+import 'forecast_list_item.dart';
 
 class ForecastList extends StatelessWidget {
   final List<DailyForecast> dailyForecast;
