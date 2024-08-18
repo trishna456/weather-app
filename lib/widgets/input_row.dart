@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/widgets/UI/input_field.dart';
 import 'package:weather_app/widgets/UI/toggle_button.dart';
+import 'package:weather_app/state/weather_state.dart';
 
 class InputRow extends StatelessWidget {
-  final TextEditingController controller;
-  final VoidCallback fetchWeather;
-  final String units;
-  final ValueChanged<String> onToggle;
-
-  const InputRow({
-    super.key,
-    required this.controller,
-    required this.fetchWeather,
-    required this.units,
-    required this.onToggle,
-  });
+  const InputRow({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final weatherState = Provider.of<WeatherState>(context);
+    final TextEditingController controller = TextEditingController();
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Row(
@@ -30,12 +24,18 @@ class InputRow extends StatelessWidget {
                 Expanded(
                   child: InputField(
                     controller: controller,
-                    onSubmitted: fetchWeather,
+                    onSubmitted: () {
+                      weatherState.fetchWeather(cityName: controller.text);
+                      controller.clear();
+                    },
                   ),
                 ),
                 IconButton(
                   icon: const Icon(Icons.search, color: Colors.white70),
-                  onPressed: fetchWeather,
+                  onPressed: () {
+                    weatherState.fetchWeather(cityName: controller.text);
+                    controller.clear();
+                  },
                 ),
               ],
             ),
@@ -46,8 +46,11 @@ class InputRow extends StatelessWidget {
 
           // ---------- Unit Toggle Switch ----------
           UnitToggleButton(
-            units: units,
-            onToggle: onToggle,
+            units: weatherState.units,
+            onToggle: (selectedUnit) {
+              weatherState.setUnits(selectedUnit);
+              weatherState.fetchWeather();
+            },
           ),
         ],
       ),

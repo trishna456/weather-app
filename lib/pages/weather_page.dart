@@ -1,103 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:weather_app/models/weather_model.dart';
-import 'package:weather_app/services/location_service.dart';
-import 'package:weather_app/services/weather_service.dart';
-import 'package:weather_app/constants.dart';
-import 'package:weather_app/widgets/custom_loading_widget.dart';
-import 'package:weather_app/widgets/weather_forecast/forecast_list.dart';
+import 'package:provider/provider.dart';
 import 'package:weather_app/widgets/input_row.dart';
 import 'package:weather_app/widgets/current_weather/main_weather_info.dart';
 import 'package:weather_app/widgets/current_weather/weather_info.dart';
+import 'package:weather_app/widgets/custom_loading_widget.dart';
 import 'package:weather_app/widgets/custom_error_widget.dart';
+import 'package:weather_app/state/weather_state.dart';
+import 'package:weather_app/widgets/weather_forecast/forecast_list.dart';
 
-class WeatherPage extends StatefulWidget {
+class WeatherPage extends StatelessWidget {
   const WeatherPage({super.key});
 
   @override
-  State<WeatherPage> createState() {
-    return _WeatherPageState();
-  }
-}
-
-class _WeatherPageState extends State<WeatherPage> {
-  final _weatherService = WeatherService(API_KEY);
-  final _locationService = LocationService(API_KEY);
-
-  Weather? _weather;
-  String _units = 'metric'; //default to metric
-  String? _error;
-  bool _isLoading = false;
-  final TextEditingController _cityController = TextEditingController();
-
-// fetch weather based on city name or device location
-  _fetchWeather() async {
-    double lat;
-    double lon;
-
-    try {
-      setState(() {
-        _isLoading = true;
-        _error = null; // Clear any previous error
-      });
-      // Get the lat and lon for given location
-      if (_cityController.text.isNotEmpty) {
-        // If the user has entered a city name, fetch coordinates for that city
-        final coordinates = await _locationService
-            .getCoordinatesByCityName(_cityController.text);
-        lat = coordinates['lat']!;
-        lon = coordinates['lon']!;
-
-        // Clear the input field after getting the coordinates
-        _cityController.clear();
-      } else {
-        debugPrint(_weather?.cityName);
-        if (_weather?.cityName != null) {
-          // Use the previously entered city name (for toggles)
-          final coordinates = await _locationService
-              .getCoordinatesByCityName(_weather!.cityName);
-          lat = coordinates['lat']!;
-          lon = coordinates['lon']!;
-        } else {
-          // If not input, fetch weather from the current device location
-          Position position = await _locationService.getCurrentPosition();
-          lat = position.latitude;
-          lon = position.longitude;
-        }
-      }
-
-      // Get the actual weather data
-      final weather =
-          await _weatherService.getWeatherByCoordinates(lat, lon, _units);
-
-      setState(() {
-        _weather = weather;
-        _isLoading = false;
-      });
-    } catch (e) {
-      debugPrint('Failed to load weather data.');
-      setState(() {
-        _error = 'Failed to load weather data. Please try again.';
-        _isLoading = false;
-      });
-      //throw Exception('Failed to load weather data');
-    }
-  }
-
-// init state
-  @override
-  void initState() {
-    super.initState();
-
-    // fetch weather on startup
-    _fetchWeather();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // ---------- Accessing WeatherState from Provider ----------
+    final weatherState = Provider.of<WeatherState>(context);
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
+          // ---------- Background Gradient ----------
           gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
@@ -111,37 +33,46 @@ class _WeatherPageState extends State<WeatherPage> {
             children: [
               Column(
                 children: [
-                  InputRow(
-                    controller: _cityController,
-                    fetchWeather: _fetchWeather,
-                    units: _units,
-                    onToggle: (selectedUnit) {
-                      setState(() {
-                        _units = selectedUnit;
-                        _fetchWeather();
-                      });
-                    },
-                  ),
-                  if (_isLoading) ...[
-                    const Expanded(child: LoadingWidget()),
-                  ] else if (_error != null) ...[
+                  // ---------- Input Row ----------
+                  const InputRow(),
+
+                  // ---------- Loading State ----------
+                  if (weatherState.isLoading) ...[
+                    const Expanded(child: CustomLoadingWidget()),
+                  ]
+
+                  // ---------- Error State ----------
+                  else if (weatherState.error != null) ...[
                     const SizedBox(height: 20),
                     CustomErrorWidget(
-                      errorMessage: _error!,
+                      errorMessage: weatherState.error!,
                     ),
-                  ] else if (_weather != null) ...[
+                  ]
+
+                  // ---------- Display Weather Information ----------
+                  else if (weatherState.weather != null) ...[
                     Expanded(
                       child: Column(
                         children: [
+                          // ---------- Main Weather Information ----------
                           MainWeatherInfo(
-                            weather: _weather!,
-                            units: _units,
+                            weather: weatherState.weather!,
+                            units: weatherState.units,
                           ),
+
                           const SizedBox(height: 20),
-                          WeatherInfo(weather: _weather!, units: _units),
+
+                          // ---------- Additional Weather Details ----------
+                          WeatherInfo(
+                            weather: weatherState.weather!,
+                            units: weatherState.units,
+                          ),
+
+                          // ---------- 5-Day Weather Forecast ----------
                           Expanded(
                             child: ForecastList(
-                                dailyForecast: _weather!.dailyForecast),
+                                dailyForecast:
+                                    weatherState.weather!.dailyForecast),
                           ),
                         ],
                       ),

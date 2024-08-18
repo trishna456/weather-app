@@ -13,13 +13,18 @@ class WeatherState with ChangeNotifier {
   String? _error;
   bool _isLoading = false;
 
-  WeatherState(this._weatherService, this._locationService);
+  WeatherState(this._weatherService, this._locationService) {
+    // Fetch weather on initialization
+    fetchWeather();
+  }
 
+  // ---------- Getters to Access State Variables ----------
   Weather? get weather => _weather;
   String get units => _units;
   String? get error => _error;
   bool get isLoading => _isLoading;
 
+  // ---------- Method to Fetch Weather Data ----------
   Future<void> fetchWeather({String? cityName}) async {
     double lat;
     double lon;
@@ -29,15 +34,24 @@ class WeatherState with ChangeNotifier {
       _error = null;
       notifyListeners();
 
+      // Fetch coordinates based on city name if provided
       if (cityName != null && cityName.isNotEmpty) {
         final coordinates =
             await _locationService.getCoordinatesByCityName(cityName);
         lat = coordinates['lat']!;
         lon = coordinates['lon']!;
       } else {
-        Position position = await _locationService.getCurrentPosition();
-        lat = position.latitude;
-        lon = position.longitude;
+        // If no city name is provided, use the last fetched city's coordinates or current location
+        if (_weather?.cityName != null) {
+          final coordinates = await _locationService
+              .getCoordinatesByCityName(_weather!.cityName);
+          lat = coordinates['lat']!;
+          lon = coordinates['lon']!;
+        } else {
+          Position position = await _locationService.getCurrentPosition();
+          lat = position.latitude;
+          lon = position.longitude;
+        }
       }
 
       _weather =
@@ -50,6 +64,7 @@ class WeatherState with ChangeNotifier {
     }
   }
 
+  // ---------- Method to Set Temperature Units (Metric or Imperial) ----------
   void setUnits(String units) {
     _units = units;
     notifyListeners();
