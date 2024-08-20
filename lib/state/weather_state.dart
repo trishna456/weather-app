@@ -4,6 +4,7 @@ import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/location_service.dart';
 import 'package:weather_app/services/weather_service.dart';
 
+// Reference: https://docs.flutter.dev/data-and-backend/state-mgmt/simple
 class WeatherState with ChangeNotifier {
   final WeatherService _weatherService;
   final LocationService _locationService;
