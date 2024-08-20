@@ -9,6 +9,7 @@ class LocationService {
   LocationService(this.apiKey);
 
   // ---------- Get Current Position ----------
+  // Reference: https://pub.dev/packages/geolocator
   Future<Position> getCurrentPosition() async {
     LocationPermission permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
