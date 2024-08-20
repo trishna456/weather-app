@@ -52,15 +52,16 @@ On Web
 ```bash
 flutter run -d chrome
 ```
-
 ## Project Structure
 
+```plaintext
 lib/
-├── models/ # Contains data models for the weather data
-├── services/ # Contains services for fetching weather data from APIs
-├── state/ # Contains the WeatherState class for managing app state with Provider
-├── widgets/ # Contains reusable UI components like input fields, weather info displays, and forecast lists
-└── pages/ # Contains the main page of the app
+├── models/       # Contains data models for the weather data
+├── services/     # Contains services for fetching weather data from APIs
+├── state/        # Contains the WeatherState class for managing app state with Provider
+├── widgets/      # Contains reusable UI components like input fields, weather info displays, and forecast lists
+└── pages/        # Contains the main page of the app
+```
 
 ## Contributions
 
