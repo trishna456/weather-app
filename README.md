@@ -104,8 +104,7 @@ This project draws on a select number of key resources, incorporating techniques
 ### 6. Lottie Animations
 
 - **Creators:**
-  - [jochang](https://app.lottiefiles.com/jochang) on LottieFiles
-  - [Anahita Salimi](https://app.lottiefiles.com/Anahita-Salimi) on LottieFiles
+  - jochang, Anahita Salimi on LottieFiles
 
 - **Animations Used:**
   - [Weather Animation 1](https://app.lottiefiles.com/animation/85be550b-5fa8-4f3b-baf4-e83301b10081?channel=web&source=public-animation&panel=download)
