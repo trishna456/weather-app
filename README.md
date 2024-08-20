@@ -70,35 +70,35 @@ This project draws on a select number of key resources, incorporating techniques
 ### 1.  Weather App Design
 
 - **References:**
-  - [Dribbble Weather App Designs](https://dribbble.com/tags/weather-app)
+  - [Dribbble Weather App Designs](https://dribbble.com/tags/weather-app) (Dribbble)
   - Inspiration from Apple's iOS inbuilt weather app
 - **Usage:** The design ideas for the weather app were inspired by exploring multiple designs on Dribbble and drawing inspiration from Apple's iOS weather app.
 
 ### 2. Class Constructors
 
 - **References:**
-  - [Dart Constructors](https://dart.dev/language/constructors)
-  - [Constructor vs Initializer List in Dart](https://stackoverflow.com/questions/52013357/what-is-the-difference-between-constructor-and-initializer-list-in-dart)
+  - [Dart Constructors](https://dart.dev/language/constructors) (Dart Documentation)
+  - [Constructor vs Initializer List in Dart](https://stackoverflow.com/questions/52013357/what-is-the-difference-between-constructor-and-initializer-list-in-dart) (Stack Overflow)
 - **Usage:** These references were used to understand and implement class constructors in Dart.
 
 ### 3. State Management with Provider
 
-- **Reference:** [Simple App State Management](https://docs.flutter.dev/data-and-backend/state-mgmt/simple)
+- **Reference:** [Simple App State Management](https://docs.flutter.dev/data-and-backend/state-mgmt/simple) (Flutter Documentation)
 - **Usage:** Helpful in implementing state management using the Provider package.
 
 
 ### 4. Date Utility Functions
 
-- **Reference:** [How do I format a date with Dart?](https://stackoverflow.com/questions/16126579/how-do-i-format-a-date-with-dart)
+- **Reference:** [How do I format a date with Dart?](https://stackoverflow.com/questions/16126579/how-do-i-format-a-date-with-dart) (Stack Overflow)
 - **Usage:** This thread provided a clear and concise method for formatting dates in Dart using `DateFormat`.
 
 ### 5. Error Resolution
 
 - **References:**
-  - [Flutter Common Errors](https://docs.flutter.dev/testing/common-errors)
-  - [Flutter Expanded vs. Flexible](https://stackoverflow.com/questions/52645944/flutter-expanded-vs-flexible)
-  - [Flutter error with Expanded](https://stackoverflow.com/questions/63530292/flutter-error-with-expanded-although-already-wrapped-with-column)
-  - [Flutter Column Doesn’t Expand](https://stackoverflow.com/questions/49310461/flutter-column-doesnt-expand)
+  - [Flutter Common Errors](https://docs.flutter.dev/testing/common-errors) (Flutter Documentation)
+  - [Flutter Expanded vs. Flexible](https://stackoverflow.com/questions/52645944/flutter-expanded-vs-flexible) (Stack Overflow)
+  - [Flutter error with Expanded](https://stackoverflow.com/questions/63530292/flutter-error-with-expanded-although-already-wrapped-with-column) (Stack Overflow)
+  - [Flutter Column Doesn’t Expand](https://stackoverflow.com/questions/49310461/flutter-column-doesnt-expand) (Stack Overflow)
 - **Usage:** Helpful in addressing errors related to layout widgets like `Column`, `Expanded`, and `Flexible`.
 
 ### 6. Lottie Animations
@@ -107,16 +107,16 @@ This project draws on a select number of key resources, incorporating techniques
   - jochang, Anahita Salimi on LottieFiles
 
 - **Animations Used:**
-  - [Weather Animation 1](https://app.lottiefiles.com/animation/85be550b-5fa8-4f3b-baf4-e83301b10081?channel=web&source=public-animation&panel=download)
-  - [Weather Animation 2](https://app.lottiefiles.com/animation/e11b020c-21dd-433c-a1c3-0f9c4d947dc2?channel=web&source=public-animation&panel=download)
-  - [Weather Animation 3](https://app.lottiefiles.com/animation/f6c326d4-df83-4a81-b4f9-601d43a6fb3a?channel=web&source=public-animation&panel=download)
-  - [Weather Animation 4](https://app.lottiefiles.com/animation/45316ead-54e7-46e8-9459-ab4cc0e63aac?channel=web&source=public-animation&panel=download)
-  - [Error Cat Animation](https://app.lottiefiles.com/animation/fcfb6aa6-aef7-4d34-9edd-3afb89301e78?channel=web&source=public-animation&panel=download) 
+  - [Weather Animation 1](https://app.lottiefiles.com/animation/85be550b-5fa8-4f3b-baf4-e83301b10081?channel=web&source=public-animation&panel=download) (LottieFiles)
+  - [Weather Animation 2](https://app.lottiefiles.com/animation/e11b020c-21dd-433c-a1c3-0f9c4d947dc2?channel=web&source=public-animation&panel=download) (LottieFiles)
+  - [Weather Animation 3](https://app.lottiefiles.com/animation/f6c326d4-df83-4a81-b4f9-601d43a6fb3a?channel=web&source=public-animation&panel=download) (LottieFiles)
+  - [Weather Animation 4](https://app.lottiefiles.com/animation/45316ead-54e7-46e8-9459-ab4cc0e63aac?channel=web&source=public-animation&panel=download) (LottieFiles)
+  - [Error Cat Animation](https://app.lottiefiles.com/animation/fcfb6aa6-aef7-4d34-9edd-3afb89301e78?channel=web&source=public-animation&panel=download) (LottieFiles)
 - **Usage:** Animations were used to enhance the user experience by adding dynamic visual feedback.
 
 ### 7. Flutter Tutorials
 
-- **Flutter YouTube Channel:** [Flutter Dev on YouTube](https://www.youtube.com/@flutterdev)
+- **Flutter YouTube Channel:** [Flutter Dev on YouTube](https://www.youtube.com/@flutterdev) (Flutter YouTube Channel)
 - **Usage:** Guided the development process, particularly in understanding the Flutter's UI components and best practices.
 
 
