@@ -11,16 +11,9 @@ class WeatherService {
 
   WeatherService(this.apiKey) : locationService = LocationService(apiKey);
   /*
-  Constructor Parameter Initialization:
-  WeatherService(this.apiKey): This part of the constructor is shorthand for initializing the apiKey field with the value passed to the constructor.
-
-  Initializer List:
-  : locationService = LocationService(apiKey): This part is the initializer list. 
-  It initializes the locationService field by creating a new instance of the LocationService class and passing the apiKey to its constructor.
-  This happens before the constructor body runs.
-
-  For fields that need to be initialized with values dependent on the constructor parameters,
-  the initializer list remains the more concise and preferred approach in Dart.
+  Constructor Parameter Initialization and Initializer List:
+  Reference:
+  https://stackoverflow.com/questions/52013357/what-is-the-difference-between-constructor-and-initializer-list-in-dart 
   */
 
   Future<Weather> getWeatherByCoordinates(
