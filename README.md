@@ -14,7 +14,7 @@ A Flutter-based Weather App that provides real-time weather information and a 5-
 ## Screenshots
 
 ### Mobile Screenshots
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
+<div style="display: flex; flex-wrap: wrap; gap: 40px;">
     <img src="assets/screenshots/mobile_ss_1.png" alt="Mobile Screenshot 1" height="250"/>
     <img src="assets/screenshots/mobile_ss_2.png" alt="Mobile Screenshot 2" height="250"/>
     <img src="assets/screenshots/mobile_ss_3.png" alt="Mobile Screenshot 3" height="250"/>
@@ -22,12 +22,12 @@ A Flutter-based Weather App that provides real-time weather information and a 5-
 </div>
 
 ### Web Screenshots
-<div style="display: flex; flex-wrap: wrap; gap: 10px;">
-    <img src="assets/screenshots/web_ss_1.png" alt="Web Screenshot 1" height="250"/>
-    <img src="assets/screenshots/web_ss_2.png" alt="Web Screenshot 2" height="250"/>
-    <img src="assets/screenshots/web_ss_3.png" alt="Web Screenshot 3" height="250"/>
-    <img src="assets/screenshots/web_ss_4.png" alt="Web Screenshot 4" height="250"/>
-    <img src="assets/screenshots/web_ss_5.png" alt="Web Screenshot 5" height="250"/>
+<div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    <img src="assets/screenshots/web_ss_1.png" alt="Web Screenshot 1" height="200"/>
+    <img src="assets/screenshots/web_ss_2.png" alt="Web Screenshot 2" height="200"/>
+    <img src="assets/screenshots/web_ss_3.png" alt="Web Screenshot 3" height="200"/>
+    <img src="assets/screenshots/web_ss_4.png" alt="Web Screenshot 4" height="200"/>
+    <img src="assets/screenshots/web_ss_5.png" alt="Web Screenshot 5" height="200"/>
 </div>
 
 
