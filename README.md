@@ -13,18 +13,13 @@ A Flutter-based Weather App that provides real-time weather information and a 5-
 
 ## Screenshots
 
-![Real-Time Weather Data](assets/screenshots/mobile_ss_1.png)
+<img src="assets/screenshots/mobile_ss_1.png" alt="Mobile Screenshot 1" height="200"/>
 
-![5-Day Forecast](assets/screenshots/mobile_ss_2.png)
+<img src="assets/screenshots/mobile_ss_2.png" alt="Mobile Screenshot 2" height="200"/>
 
-![Dynamic Units Toggle](assets/screenshots/mobile_ss_3.png)
+<img src="assets/screenshots/mobile_ss_3.png" alt="Mobile Screenshot 3" height="200"/>
 
-![Responsive Design](assets/screenshots/mobile_ss_4.png)
-
-![Error Handling](assets/screenshots/web_ss_1.png)
-
-![Loading State](assets/screenshots/web_ss_2.png)
-
+<img src="assets/screenshots/mobile_ss_4.png" alt="Mobile Screenshot 4" height="200"/>
 
 ## Technologies Used
 
