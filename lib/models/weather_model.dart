@@ -34,14 +34,7 @@ class Weather {
   });
 
   factory Weather.fromJson(Map<String, dynamic> json, String cityName) {
-    /*
-    The factory keyword in Dart is used to define a factory constructor.
-    A factory constructor is a special type of constructor that is used to create an instance of a class,
-    but unlike regular constructors, it can return an existing instance or a different instance based on some logic.
-
-    In this case, Weather.fromJson is a factory constructor that creates a Weather instance from a JSON map.
-    It is not an inbuilt function; rather, it is a custom constructor that we have defined for our Weather class.
-    */
+  
     List<DailyForecast> dailyForecast = (json['daily'] as List)
         .map((dailyJson) => DailyForecast.fromJson(dailyJson))
         .toList();
